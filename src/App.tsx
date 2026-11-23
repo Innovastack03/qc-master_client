@@ -1,9 +1,9 @@
 import { useEffect } from "react";
-import { NavLink, Navigate, Route, Routes } from "react-router-dom";
-import {
-  Boxes, ClipboardCheck, FolderTree, PackagePlus, Ruler, ShieldCheck, SlidersHorizontal, Truck, type LucideIcon,
-} from "lucide-react";
+import { Navigate, Route, Routes } from "react-router-dom";
+import { ShieldCheck } from "lucide-react";
+import { Sidebar } from "./components/Sidebar";
 import { Toast } from "./components/Toast";
+import { APP_NAME } from "./config";
 import { CategoriesPage } from "./pages/CategoriesPage";
 import { IqcNewPage } from "./pages/IqcNewPage";
 import { IqcRegisterPage } from "./pages/IqcRegisterPage";
@@ -16,21 +16,6 @@ import { MrnListPage } from "./pages/MrnListPage";
 import { QcParametersPage } from "./pages/QcParametersPage";
 import { VendorsPage } from "./pages/VendorsPage";
 import { useMasterStore } from "./store/masterStore";
-
-const NAV: { section: string; links: { to: string; label: string; icon: LucideIcon }[] }[] = [
-  { section: "Inward", links: [{ to: "/mrn", label: "Material Receipt (MRN)", icon: PackagePlus }] },
-  { section: "Quality", links: [{ to: "/iqc", label: "Incoming Quality Check", icon: ClipboardCheck }] },
-  {
-    section: "Admin",
-    links: [
-      { to: "/categories", label: "Categories", icon: FolderTree },
-      { to: "/items", label: "Material Grades", icon: Boxes },
-      { to: "/qc-parameters", label: "QC Parameters", icon: SlidersHorizontal },
-      { to: "/masters", label: "UOM & Processes", icon: Ruler },
-      { to: "/vendors", label: "Vendors", icon: Truck },
-    ],
-  },
-];
 
 export default function App() {
   const loadAll = useMasterStore((s) => s.loadAll);
@@ -49,47 +34,23 @@ export default function App() {
       <header className="flex h-10 shrink-0 items-center justify-between bg-slate-800 px-4 text-white print:hidden">
         <div className="flex items-center gap-2">
           <ShieldCheck size={18} className="text-sky-400" />
-          <span className="font-semibold">QC Master</span>
+          <span className="font-semibold">{APP_NAME}</span>
           <span className="text-xs text-slate-400">· Quality Control System</span>
         </div>
         <span className="text-xs text-slate-300">{today}</span>
       </header>
 
       <div className="flex min-h-0 flex-1 print:block">
-        {/* sidebar */}
-        <aside className="w-56 shrink-0 overflow-y-auto border-r border-slate-300 bg-slate-50 py-3 print:hidden">
-          {NAV.map((g) => (
-            <div key={g.section} className="mb-4">
-              <div className="mb-1 px-4 text-[10px] font-bold uppercase tracking-wider text-slate-400">{g.section}</div>
-              {g.links.map(({ to, label, icon: Icon }) => (
-                <NavLink
-                  key={to}
-                  to={to}
-                  className={({ isActive }) =>
-                    `flex items-center gap-2.5 border-l-[3px] px-4 py-1.5 text-[13px] ${
-                      isActive
-                        ? "border-blue-600 bg-white font-semibold text-blue-700"
-                        : "border-transparent text-slate-700 hover:bg-white"
-                    }`
-                  }
-                >
-                  <Icon size={16} strokeWidth={1.8} />
-                  {label}
-                </NavLink>
-              ))}
-            </div>
-          ))}
-        </aside>
+        <Sidebar />
 
-        {/* workspace */}
         <main className="min-w-0 flex-1 overflow-y-auto p-4 print:overflow-visible print:p-0">
           {loadError ? (
             <div className="card text-red-600">
-              Cannot reach the server ({loadError}). Is it running on port 4000?
+              Cannot reach the server ({loadError}).
               <button className="btn ml-3" onClick={() => void loadAll()}>Retry</button>
             </div>
           ) : !loaded ? (
-            <p className="text-slate-500">Loading…</p>
+            <p className="text-slate-500">Loading… (the first load can take up to a minute while the server wakes up)</p>
           ) : (
             <Routes>
               <Route path="/" element={<Navigate to="/iqc" replace />} />
@@ -116,7 +77,7 @@ export default function App() {
           <span className={`inline-block h-2 w-2 rounded-full ${loadError ? "bg-red-500" : "bg-emerald-500"}`} />
           {loadError ? "Disconnected" : "Connected"}
         </span>
-        <span>QC Master v1.0</span>
+        <span>{APP_NAME}</span>
       </footer>
       <Toast />
     </div>

@@ -10,6 +10,8 @@ export type FieldDef = {
   required?: boolean;
   hideInTable?: boolean;
   placeholder?: string;
+  /** shown but not editable (e.g. auto-generated codes) */
+  readOnly?: boolean;
 };
 
 type Row = { id: number } & Record<string, unknown>;
