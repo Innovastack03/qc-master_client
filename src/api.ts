@@ -1,5 +1,13 @@
+// empty VITE_API_URL = same domain; set it when the API is on another domain (Render)
+const BASE = `${(import.meta.env.VITE_API_URL ?? "").replace(/\/$/, "")}/api`;
+
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(`/api${path}`, { ...init, headers: { "Content-Type": "application/json" } });
+  let res: Response;
+  try {
+    res = await fetch(`${BASE}${path}`, { ...init, headers: { "Content-Type": "application/json" } });
+  } catch {
+    throw new Error("Cannot reach the server. Check your connection.");
+  }
   if (res.status === 204) return undefined as T;
   const body = await res.json().catch(() => null);
   if (!res.ok) throw new Error(body?.error ?? `Request failed (${res.status})`);
