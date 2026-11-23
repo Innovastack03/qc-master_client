@@ -1,0 +1,50 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+html, body, #root { height: 100%; }
+body { @apply bg-slate-100 text-[13px] text-slate-800 antialiased; }
+
+@layer components {
+  /* panels */
+  .card { @apply rounded-md border border-slate-300 bg-white p-4; }
+  .panel { @apply rounded-md border border-slate-300 bg-white; }
+  .panel-head { @apply flex items-center justify-between gap-2 rounded-t-md border-b border-slate-200 bg-slate-50 px-3 py-2 text-[11px] font-semibold uppercase tracking-wide text-slate-600; }
+  .panel-body { @apply p-3; }
+  .toolbar { @apply flex flex-wrap items-center gap-2 rounded-md border border-slate-300 bg-white px-3 py-2; }
+  .page-title { @apply text-[15px] font-semibold text-slate-900; }
+  .label { @apply mb-0.5 block text-[11px] font-medium text-slate-600; }
+
+  /* inputs */
+  .input { @apply h-8 w-full rounded-sm border border-slate-300 bg-white px-2 text-[13px] outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 disabled:bg-slate-100 disabled:text-slate-500; }
+  textarea.input { @apply py-1.5; }
+
+  /* buttons */
+  .btn { @apply inline-flex h-8 items-center justify-center gap-1.5 whitespace-nowrap rounded-sm border border-slate-300 bg-white px-3 text-[13px] font-medium text-slate-700 shadow-sm hover:bg-slate-50 active:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50; }
+  .btn-primary { @apply inline-flex h-8 items-center justify-center gap-1.5 whitespace-nowrap rounded-sm border border-blue-700 bg-blue-600 px-3 text-[13px] font-medium text-white shadow-sm hover:bg-blue-700 active:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-50; }
+  .btn-sm { @apply h-7 px-2 text-xs; }
+  .btn-link { @apply text-[13px] text-blue-700 hover:underline; }
+  .btn-link-danger { @apply text-[13px] text-red-600 hover:underline; }
+  .badge { @apply inline-block rounded-sm bg-blue-50 px-1.5 py-0.5 text-[11px] font-semibold text-blue-700; }
+
+  /* grid tables */
+  .data-table { @apply w-full border-collapse text-left text-[13px]; }
+  .data-table th { @apply sticky top-0 z-10 border border-slate-300 bg-slate-100 px-2 py-1.5 text-[11px] font-semibold uppercase tracking-wide text-slate-600; }
+  .data-table td { @apply border border-slate-200 px-2 py-1.5 align-middle; }
+  .data-table tbody tr:nth-child(even) { @apply bg-slate-50; }
+  .data-table tbody tr:hover { @apply bg-blue-50/70; }
+
+  /* printable document (A4) */
+  .doc { @apply mx-auto max-w-[210mm] bg-white p-8 text-[12px] text-black shadow-md print:max-w-none print:p-0 print:shadow-none; }
+  .doc-table { @apply w-full border-collapse; }
+  .doc-table th, .doc-table td { @apply border border-slate-800 px-2 py-1 align-top; }
+  .doc-table th { @apply bg-slate-100 text-left font-semibold; }
+}
+
+@media print {
+  @page { size: A4; margin: 10mm; }
+  html, body, #root { height: auto; background: white; }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
